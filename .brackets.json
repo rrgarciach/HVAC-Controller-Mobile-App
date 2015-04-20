@@ -1,0 +1,6 @@
+{
+    "jscodehints.detectedExclusions": [
+        "/Users/rrgarciach/Documents/Development/Cordova/hvacController/www/lib/ionic/js/ionic.min.js",
+        "/Users/rrgarciach/Documents/Development/Cordova/hvacController/www/js/controllers.js"
+    ]
+}

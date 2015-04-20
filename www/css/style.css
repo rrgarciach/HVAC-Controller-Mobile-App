@@ -1,1 +1,21 @@
 /* Empty. Add your own CSS if you like */
+.main-screen .temperature h1 {
+    font-size: 4rem;
+    text-align: right;
+}
+.main-screen .temperature span {
+    font-size: 3rem;
+}
+.main-screen .temperature h2 {
+    font-size: 1.5rem;
+    text-align: right;
+}
+.main-screen .badge {
+    margin-right: 80%;
+}
+.main-screen .labels {
+    text-align: right;
+}
+.main-screen .values {
+    text-align: left;
+}

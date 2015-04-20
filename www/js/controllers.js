@@ -33,15 +33,38 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+.controller('MainScreenCtrl', function($scope,$ionicModal) {
+    $scope.scouts = [
+                    {
+                        id:1,
+                        name:'Zone A',
+                        temperature:24,
+                        power:false,
+                        quiet:false,
+                        delayTime:900,
+                    },
+                    {
+                        id:2,
+                        name:'Zone A',
+                        temperature:24,
+                        power:false,
+                        quiet:false,
+                        delayTime:900,
+                    },
+                    ]
+    
+    $ionicModal.fromTemplateUrl('templates/scoutModal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.scoutModal = modal;
+    });
+    $scope.openScoutModal = function(modal) {
+        $scope.scoutModal.show();
+    };
+    $scope.closeScoutModal = function() {
+        $scope.scoutModal.hide();
+    };
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
