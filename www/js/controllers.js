@@ -50,6 +50,7 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('ScoutCtrl', function($scope, $stateParams) {
-    $scope.scout = angular.fromJson($stateParams.scout)
+.controller('ScoutCtrl', function($scope, $stateParams, scoutService) {
+//    $scope.scout = angular.fromJson($stateParams.scout)
+    $scope.scout = scoutService.getScout($stateParams.scoutId)
 });

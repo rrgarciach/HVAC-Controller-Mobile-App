@@ -40,7 +40,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 //    }
 //  })
   .state('app.scout', {
-    url: "/scout/:scout",
+    url: "/scout/:scoutId",
     views: {
       'menuContent': {
         templateUrl: "templates/scout.html",
