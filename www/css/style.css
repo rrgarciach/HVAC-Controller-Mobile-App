@@ -19,3 +19,7 @@
 .main-screen .values {
     text-align: left;
 }
+
+.scout-screen img {
+    width: 5rem;
+}

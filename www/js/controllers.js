@@ -33,39 +33,23 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('MainScreenCtrl', function($scope,$ionicModal) {
-    $scope.scouts = [
-                    {
-                        id:1,
-                        name:'Zone A',
-                        temperature:24,
-                        power:false,
-                        quiet:false,
-                        delayTime:900,
-                    },
-                    {
-                        id:2,
-                        name:'Zone A',
-                        temperature:24,
-                        power:false,
-                        quiet:false,
-                        delayTime:900,
-                    },
-                    ]
-    
-    $ionicModal.fromTemplateUrl('templates/scoutModal.html', {
+.controller('MainScreenCtrl', function($scope, $ionicModal, scoutService) {
+    $scope.scouts = scoutService.getScouts()
+    $ionicModal.fromTemplateUrl('templates/settings.html', {
         scope: $scope,
         animation: 'slide-in-up'
     }).then(function(modal) {
-        $scope.scoutModal = modal;
+        $scope.settingsModal = modal;
     });
-    $scope.openScoutModal = function(modal) {
-        $scope.scoutModal.show();
+    $scope.openSettingsModal = function(scout) {
+        $scope.settingsModal.show();
+        $scope.scout = scout
     };
-    $scope.closeScoutModal = function() {
-        $scope.scoutModal.hide();
+    $scope.closeSettingsModal = function() {
+        $scope.settingsModal.hide();
     };
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('ScoutCtrl', function($scope, $stateParams) {
+    $scope.scout = angular.fromJson($stateParams.scout)
 });

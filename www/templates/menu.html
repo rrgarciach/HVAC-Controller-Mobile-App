@@ -18,11 +18,14 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
+        <ion-item nav-clear menu-close href="#/app/main">
+          Main menu
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="openSettingsModal()">
+          Settings
+        </ion-item>
         <ion-item nav-clear menu-close ng-click="login()">
           Login
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/search">
-          Search
         </ion-item>
       </ion-list>
     </ion-content>

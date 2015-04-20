@@ -1,0 +1,69 @@
+<ion-view view-title="{{scout.name}}">
+<!--    <ion-header-bar>-->
+<!--        <a class="button button-clear" href="#/app/main">Back</a>-->
+<!--        <h1 class="title">{{scout.name}}</h1>-->
+<!--    </ion-header-bar>-->
+    <ion-content class="scout-screen">
+        <ion-item>
+            <div class="row">
+                <div class="col col-offset-33">
+                    <img src="../img/minisplit-icon-on.png">
+                </div>
+            </div>
+        </ion-item>
+        <ion-item>
+            <div class="row">
+                <div class="col">Device ID</div>
+                <div class="col col-10">{{scout.groupId}}</div>
+            </div>
+        </ion-item>
+        <ion-item>
+            <div class="row">
+                <div class="col">Group ID</div>
+                <div class="col col-10">{{scout.groupId}}</div>
+            </div>
+        </ion-item>
+        <ion-item>
+            <div class="row">
+                <div class="col col-center">Power Status:</div>
+                <div class="col-20">
+                    <label class="toggle toggle-positive">
+                        <input type="checkbox" ng-checked="scout.power">
+                        <div class="track">
+                            <div class="handle"></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </ion-item>
+        <ion-item>
+            <div class="row">
+                <div class="col col-center">Automatic:</div>
+                <div class="col-20">
+                    <label class="toggle toggle-positive">
+                        <input type="checkbox" ng-model="scout.automatic">
+                        <div class="track">
+                            <div class="handle"></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </ion-item>
+        <ion-item>
+            <div class="row">
+                <div class="col">Max temperature:</div>
+                <div class="col col-20">{{scout.maxTemperature}} °C</div>
+            </div>
+        </ion-item>
+        <ion-item>
+            <div class="row">
+                <div class="col col-center">Device PIN:</div>
+                <div class="col col-33">
+                    <label class="item item-input">
+                        <input type="password" placeholder="password">
+                    </label>
+                </div>
+            </div>
+        </ion-item>
+    </ion-content>
+</ion-view>

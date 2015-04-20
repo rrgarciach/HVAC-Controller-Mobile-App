@@ -1,4 +1,4 @@
-<ion-view view-title="HVAC Controller">
+<ion-view>
   <ion-content class="main-screen">
       <ion-item>
           <div class="row temperature">
@@ -11,8 +11,8 @@
           </div>
       </ion-item>
       <ion-list>
-          <ion-item ng-repeat="scout in scouts" ng-click="openScoutModal(scout)">
-              <a class="row">
+          <ion-item ng-repeat="scout in scouts" href="#/app/scout/{{scout}}">
+              <div class="row">
                   <div class="col col-20">
                       <h1>{{scout.id}}</h1>
                   </div>
@@ -20,6 +20,7 @@
                       <h2><strong>Name: </strong></h2>
                       <h2><strong>Temperature: </strong></h2>
                       <h2><strong>Power: </strong></h2>
+                      <h2><strong>Automatic: </strong></h2>
                       <h2><strong>Quiet: </strong></h2>
                       <h2><strong>Delay Time: </strong></h2>
                   </div>
@@ -27,10 +28,11 @@
                       <h2>{{scout.name}}</h2>
                       <h2>{{scout.temperature}} °C</h2>
                       <h2>{{scout.power}}</h2>
+                      <h2>{{scout.automatic}}</h2>
                       <h2>{{scout.quiet}}</h2>
                       <h2>{{scout.delayTime / 60}} minutes</h2>
                   </div>
-              </a>
+              </div>
           </ion-item>
       </ion-list>
   </ion-content>

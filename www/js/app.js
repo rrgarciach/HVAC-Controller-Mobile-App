@@ -30,23 +30,6 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     controller: 'AppCtrl'
   })
 
-//  .state('app.search', {
-//    url: "/search",
-//    views: {
-//      'menuContent': {
-//        templateUrl: "templates/search.html"
-//      }
-//    }
-//  })
-//
-//  .state('app.browse', {
-//    url: "/browse",
-//    views: {
-//      'menuContent': {
-//        templateUrl: "templates/browse.html"
-//      }
-//    }
-//  })
 //  .state('app.single', {
 //    url: "/playlists/:playlistId",
 //    views: {
@@ -56,6 +39,25 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 //      }
 //    }
 //  })
+  .state('app.scout', {
+    url: "/scout/:scout",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/scout.html",
+        controller: 'ScoutCtrl'
+      }
+    }
+  })
+  
+    .state('app.settings', {
+        url: "/settings",
+        views: {
+          'menuContent': {
+            templateUrl: "templates/settings.html"
+          }
+        }
+    })
+
     .state('app.mainScreen', {
       url: "/main",
       views: {
@@ -68,4 +70,83 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/main');
+})
+
+.service('scoutService', function() {
+    var scouts = [
+                    {
+                        id:1,
+                        groupId:1,
+                        password:'1234',
+                        automatic:true,
+                        name:'Zone A',
+                        temperature:24,
+                        maxTemperature:24,
+                        power:false,
+                        quiet:false,
+                        delayTime:900,
+                    },
+                    {
+                        id:2,
+                        groupId:1,
+                        password:'1234',
+                        automatic:false,
+                        name:'Zone B',
+                        temperature:21,
+                        maxTemperature:24,
+                        power:true,
+                        quiet:true,
+                        delayTime:900,
+                    },
+                    ];
+    
+    var addScout = function(scout) {
+        scouts.push(scout)
+    }
+    var setScouts = function(scouts) {
+        scouts = scouts
+    }
+    var setScout = function(scout) {
+        for (var i=0 ; i < scouts.length ; i++) {
+            if (scouts[i].id == scout.id) {
+                scouts[i] = scout
+                return true
+            }
+        }
+        return false
+    }
+    var getScouts = function() {
+        return scouts
+    }
+    var getScout = function(id) {
+        for (var i=0 ; i < scouts.length ; i++) {
+            if (scouts[i].id == id) {
+                return scouts[i]
+            }
+        }
+        return false
+    }
+    return {
+        addScout: addScout,
+        setScouts: setScouts,
+        setScout: setScout,
+        getScouts: getScouts,
+        getScout: getScout
+    };
 });
+
+//app.factory('myService', function() {
+// var savedData = {}
+// function set(data) {
+//   savedData = data;
+// }
+// function get() {
+//  return savedData;
+// }
+//
+// return {
+//  set: set,
+//  get: get
+// }
+//
+//});
