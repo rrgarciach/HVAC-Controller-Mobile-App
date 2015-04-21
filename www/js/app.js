@@ -101,7 +101,13 @@ angular.module('starter', ['ionic', 'starter.controllers'])
                     ];
     
     var addScout = function(scout) {
+        for (var i=0 ; i < scouts.length ; i++) {
+            if (scouts[i].id == scout.id) {
+                return false;
+            }
+        }
         scouts.push(scout)
+        return true;
     }
     var setScouts = function(scouts) {
         scouts = scouts
