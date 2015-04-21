@@ -54,6 +54,7 @@ angular.module('starter.controllers', [])
 .controller('ScoutCtrl', function($scope, $stateParams, scoutService, groupsService) {
 //    $scope.scout = angular.fromJson($stateParams.scout)
     $scope.scout = scoutService.getScout($stateParams.scoutId)
+    $scope.groups = groupsService.getGroups()
     $scope.group = groupsService.getGroup($scope.scout.groupId)
 })
 
