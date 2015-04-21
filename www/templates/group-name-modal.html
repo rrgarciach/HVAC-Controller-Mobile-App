@@ -1,0 +1,20 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Group Name</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeGroupNameModal()">Cancel</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="saveGroup()">
+      <div class="list">
+        <label class="item item-input">
+            <input type="text" ng-model="form.name" placeholder="Group Name">
+        </label>
+        <label class="item">
+          <button class="button button-block button-dark" type="submit">Save</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

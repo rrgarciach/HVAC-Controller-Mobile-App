@@ -1,74 +1,8 @@
-<ion-view view-title="Groups">
+<ion-view view-title="Groups List">
     <ion-content class="scout-screen">
-        <ion-item>
-            <div class="row">
-                <div class="col col-offset-20">
-                    <img src="../img/minisplit-icon-on.png">
-                </div>
-                <div class="col col-center">
-                    <h1>24<span> °C</span></h1>
-                </div>
-            </div>
-        </ion-item>
-        <ion-item>
-            <div class="row">
-                <div class="col">Device ID</div>
-                <div class="col col-10">{{scout.id}}</div>
-            </div>
-        </ion-item>
-        <ion-item class="item item-input item-select">
-            <div class="row">
-                <div class="col">
-                    <div class="input-label">
-                      Group
-                    </div>
-                    <select ng-model="scout.groupId">
-                        <option value="None" selected>None</option>
-                        <option value="1">Group 1</option>
-                        <option value="2">Group 2</option>
-                        <option value="3">Group 3</option>
-                        <option value="4">Group 4</option>
-                    </select>
-                </div>
-            </div>
-        </ion-item>
-        <ion-item ng-if="scout.groupId == 'None'">
-            <div class="row">
-                <div class="col col-center">Power Status:</div>
-                <div class="col-20">
-                    <label class="toggle toggle-positive">
-                        <input type="checkbox" ng-model="scout.power" ng-disabled="scout.automatic || scout.groupId != 'None'">
-                        <div class="track">
-                            <div class="handle"></div>
-                        </div>
-                    </label>
-                </div>
-            </div>
-        </ion-item>
-        <ion-item ng-if="scout.groupId == 'None'">
-            <div class="row">
-                <div class="col col-center">Automatic:</div>
-                <div class="col-20">
-                    <label class="toggle toggle-positive">
-                        <input type="checkbox" ng-model="scout.automatic" type="range">
-                        <div class="track">
-                            <div class="handle"></div>
-                        </div>
-                    </label>
-                </div>
-            </div>
-        </ion-item>
-        <ion-item ng-if="scout.groupId == 'None'">
-            <div class="row">
-                <div class="col">
-                    Max temperature: {{scout.maxTemperature}} °C
-                    <div class="range">
-                        <i class="icon ion-ios-snowy"></i>
-                        <input ng-model="scout.maxTemperature" ng-disabled="!scout.automatic || scout.groupId != 'None'" type="range" name="volume" min="14" max="28">
-                        <i class="icon ion-ios-flame"></i>
-                    </div>
-                </div>
-            </div>
+        <ion-item class="item item-icon-right" ng-repeat="group in groups" href="#/app/group/{{group.id}}">
+            {{group.name}}
+            <i class="icon ion-ios-arrow-forward"></i>
         </ion-item>
     </ion-content>
 </ion-view>

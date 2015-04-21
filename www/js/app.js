@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+var app = angular.module('starter', ['ionic', 'starter.controllers'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -30,21 +30,42 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     controller: 'AppCtrl'
   })
 
-//  .state('app.single', {
-//    url: "/playlists/:playlistId",
-//    views: {
-//      'menuContent': {
-//        templateUrl: "templates/playlist.html",
-//        controller: 'PlaylistCtrl'
-//      }
-//    }
-//  })
+    .state('app.scouts', {
+      url: "/scouts",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/scouts.html",
+          controller: 'ScoutsCtrl'
+        }
+      }
+    })
+  
   .state('app.scout', {
     url: "/scout/:scoutId",
     views: {
       'menuContent': {
         templateUrl: "templates/scout.html",
         controller: 'ScoutCtrl'
+      }
+    }
+  })
+
+  .state('app.groups', {
+    url: "/groups",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/groups.html",
+        controller: 'GroupsCtrl'
+      }
+    }
+  })
+
+  .state('app.group', {
+    url: "/group/:groupId",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/group.html",
+        controller: 'GroupCtrl'
       }
     }
   })
@@ -56,23 +77,13 @@ angular.module('starter', ['ionic', 'starter.controllers'])
             templateUrl: "templates/settings.html"
           }
         }
-    })
-
-    .state('app.scouts', {
-      url: "/scouts",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/scouts.html",
-          controller: 'ScoutsCtrl'
-        }
-      }
     });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/scouts');
 })
 
-.service('scoutService', function() {
+app.service('scoutService', function() {
     var scouts = [
                     {
                         id:1,
@@ -138,6 +149,67 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         setScout: setScout,
         getScouts: getScouts,
         getScout: getScout
+    };
+});
+
+app.service('groupsService', function() {
+    var groups = [
+                        {
+                            id: 1,
+                            name: 'Group 1',
+                        },
+                        {
+                            id: 2,
+                            name: 'Group 2',
+                        },
+                        {
+                            id: 3,
+                            name: 'Group 3',
+                        },
+                        {
+                            id: 4,
+                            name: 'Group 4',
+                        },
+                    ];
+    
+    var addGroup = function(group) {
+        for (var i=0 ; i < groups.length ; i++) {
+            if (groups[i].id == group.id) {
+                return false;
+            }
+        }
+        groups.push(group)
+        return true;
+    }
+    var setGroups = function(objArray) {
+        groups = objArray
+    }
+    var setGroup = function(group) {
+        for (var i=0 ; i < groups.length ; i++) {
+            if (groups[i].id == group.id) {
+                groups[i] = group
+                return true
+            }
+        }
+        return false
+    }
+    var getGroups = function() {
+        return groups
+    }
+    var getGroup = function(id) {
+        for (var i=0 ; i < groups.length ; i++) {
+            if (groups[i].id == id) {
+                return groups[i]
+            }
+        }
+        return false
+    }
+    return {
+        addGroup: addGroup,
+        setGroups: setGroups,
+        setGroup: setGroup,
+        getGroups: getGroups,
+        getGroup: getGroup
     };
 });
 
