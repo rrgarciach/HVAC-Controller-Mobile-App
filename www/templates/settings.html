@@ -1,4 +1,38 @@
 <ion-modal-view view-title="Settings">
-  <ion-content>
-  </ion-content>
+    <ion-header-bar class="bar-dark">
+<!--        <a class="button button-clear" ng-click="closeSettingsModal()">Back</a>-->
+        <h1 class="title">Settings</h1>
+        <div class="buttons">
+            <button class="button button-clear" ng-click="closeSettingsModal()">Close</button>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <ion-item class="item item-input item-select">
+            <div class="row">
+                <div class="col col-center">
+                    Temperature scale
+                </div>
+                <div class="col col-20">
+                    <select>
+                        <option value="c" selected>°C</option>
+                        <option value="f">°F</option>
+                    </select>
+                </div>
+            </div>
+        </ion-item>
+        <ion-item class="item item-input item-select">
+            <div class="row">
+                <div class="col col-center">
+                    System language
+                </div>
+                <div class="col col-20">
+                    <select>
+                        <option value="en" selected>English</option>
+                    </select>
+                </div>
+            </div>
+        </ion-item>
+        <ion-item>
+        </ion-item>
+    </ion-content>
 </ion-modal-view>
