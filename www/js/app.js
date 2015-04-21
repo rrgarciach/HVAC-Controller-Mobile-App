@@ -58,18 +58,18 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
     })
 
-    .state('app.mainScreen', {
-      url: "/main",
+    .state('app.scouts', {
+      url: "/scouts",
       views: {
         'menuContent': {
-          templateUrl: "templates/main.html",
-          controller: 'MainScreenCtrl'
+          templateUrl: "templates/scouts.html",
+          controller: 'ScoutsCtrl'
         }
       }
     });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/main');
+  $urlRouterProvider.otherwise('/app/scouts');
 })
 
 .service('scoutService', function() {

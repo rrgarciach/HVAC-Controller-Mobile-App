@@ -31,10 +31,6 @@ angular.module('starter.controllers', [])
       $scope.closeLogin();
     }, 1000);
   };
-})
-
-.controller('MainScreenCtrl', function($scope, $ionicModal, scoutService) {
-    $scope.scouts = scoutService.getScouts()
     
     $ionicModal.fromTemplateUrl('templates/settings.html', {
         scope: $scope,
@@ -48,6 +44,10 @@ angular.module('starter.controllers', [])
     $scope.closeSettingsModal = function() {
         $scope.settingsModal.hide();
     };
+})
+
+.controller('ScoutsCtrl', function($scope, scoutService) {
+    $scope.scouts = scoutService.getScouts()
 })
 
 .controller('ScoutCtrl', function($scope, $stateParams, scoutService) {
