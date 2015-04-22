@@ -11,11 +11,11 @@
         $scope.isEnableBluetooth = function() {
             bluetoothSerial.isEnabled(
                 function() {
-                    $scope.status.message = "Bluetooth is enabled";
+                    $scope.setStatus("Bluetooth is enabled");
                     return true;
                 },
                 function() {
-                    $scope.status.message = "Bluetooth is NOT enabled";
+                    $scope.setStatus("Bluetooth is NOT enabled");
                     return false;
                 }
             );
@@ -31,35 +31,37 @@
         }
         $scope.onDeviceList = function(devices) {
             $scope.devicesList = devices
-            $scope.status = {}
-            
-//            devices.forEach(function(device) {
-//                var device = {id: device.id, name: device.name}
-//                $scope.devicesList.push(device);
-//            });
             
             if (devices.length === 0) {
-//                $scope.status.message = "No Bluetooth devices"
+                $scope.setStatus("No Bluetooth devices");
                 
                 if (cordova.platformId === "ios") {
-                    $scope.status.message = "No Bluetooth discovered"
+                    $scope.setStatus("No Bluetooth discovered");
                 } else {
-//                    $scope.status.message = "Please pair a Bluetooth device"
-                    $scope.status.message = "No Bluetooth devices"
+                    $scope.setStatus("Please pair a Bluetooth device");
                 }
             } else {
-                $scope.status.message = "Found " + devices.length + " device" + (devices.length === 1 ? "." : "s.")
+                $scope.setStatus("Found " + devices.length + " device" + (devices.length === 1 ? "." : "s."));
             }
         }
         $scope.connect = function(e) {
             bluetoothSerial.subscribe('\n', this.onData, this.onError);
             
-            $scope.bluetoothStream
-            $scope.status.message = "Connected"
+            $scope.bluetoothStream = ""
+            $scope.setStatus("Connected");
             // go to scouts page
         }
+		$scope.onData = function(data) {
+			console.log(data);
+			$scope.bluetoothStream += data;
+		}
+        $scope.setStatus = function(message) {
+            $scope.status.message = message;
+			console.log("Status: " + message);
+        }
         $scope.onError = function(reason) {
-            $scope.status.message = "ERROR: " + reason
+            $scope.status.message = "ERROR: " + reason;
+			console.log("ERROR: " + reason);
         }
     })
  
