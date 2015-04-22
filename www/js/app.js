@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-var app = angular.module('starter', ['ionic', 'starter.controllers'])
+var app = angular.module('starter', ['ionic', 'starter.controllers', 'bluetoothSerial'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -77,10 +77,20 @@ var app = angular.module('starter', ['ionic', 'starter.controllers'])
             templateUrl: "templates/settings.html"
           }
         }
+    })
+  
+    .state('app.connect', {
+        url: "/connect",
+        views: {
+          'menuContent': {
+            templateUrl: "templates/connect.html",
+              controller: "ConnectCtrl"
+          }
+        }
     });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/scouts');
+  $urlRouterProvider.otherwise('/app/connect');
 })
 
 app.service('scoutService', function() {
