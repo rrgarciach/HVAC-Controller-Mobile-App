@@ -1,8 +1,12 @@
 (function() {
     angular.module('bluetoothSerial', [])
     
-    .controller('ConnectCtrl', function($scope, btService) {
-        $scope.status = {}
+    .controller('ConnectCtrl', function($scope, $ionicPlatform) {
+		$ionicPlatform.ready(function() {
+			$scope.refreshDeviceList();
+		});
+		
+		$scope.status = {}
         
         $scope.isEnableBluetooth = function() {
             bluetoothSerial.isEnabled(
