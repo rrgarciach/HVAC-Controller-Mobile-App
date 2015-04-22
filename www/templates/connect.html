@@ -1,18 +1,14 @@
 <ion-view view-title="Connect">
   <ion-content>
-      <ion-item class="item item-input item-select" ng-click="refreshDeviceList()">
-        <div class="input-label">
-          Device
-        </div>
-        <select>
-            <option ng-repeat="device in devicesList">{{device.name}}</option>
-        </select>
-      </ion-item>
-      <ion-item ng-repeat="device in devicesList">
+      <ion-item ng-repeat="device in devicesList" ng-click="connect(device)">
           Device name: {{device.name}}
       </ion-item>
       <ion-item>
           status: {{status.message}}
       </ion-item>
+      <ion-item ng-click="getHvacScouts()">
+          Get Scouts
+      </ion-item>
+      <ion-item ng-if="status.connected" ng-repeat="scout in scouts"></ion-item>
   </ion-content>
 </ion-view>

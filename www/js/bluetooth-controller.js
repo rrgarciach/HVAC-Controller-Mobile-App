@@ -1,3 +1,4 @@
+// @TODO: has to be adapted as in: https://github.com/don/BluetoothSerial
 (function() {
     angular.module('bluetoothSerial', [])
     
@@ -6,7 +7,11 @@
 			$scope.refreshDeviceList();
 		});
 		
-		$scope.status = {}
+		$scope.status = {
+			message:'',
+			connected:false
+		}
+		$scope.strCommand;
         
         $scope.isEnableBluetooth = function() {
             bluetoothSerial.isEnabled(
@@ -21,13 +26,18 @@
             );
         }
         $scope.enableBluetooth = function() {
-            bluetoothSerial.enable(this.refreshDeviceList, this.onError)
+            bluetoothSerial.enable(
+				function() {
+                    $scope.setStatus("Bluetooth enabled");
+                },
+			   $scope.onError
+			);
         }
         $scope.refreshDeviceList = function() {
             if ( !this.isEnableBluetooth() ) {
                 this.enableBluetooth()
             }
-            bluetoothSerial.list(this.onDeviceList, this.onError);
+            bluetoothSerial.list(this.onDeviceList, $scope.onError);
         }
         $scope.onDeviceList = function(devices) {
             $scope.devicesList = devices
@@ -44,16 +54,35 @@
                 $scope.setStatus("Found " + devices.length + " device" + (devices.length === 1 ? "." : "s."));
             }
         }
-        $scope.connect = function(e) {
-            bluetoothSerial.subscribe('\n', this.onData, this.onError);
-            
-            $scope.bluetoothStream = ""
-            $scope.setStatus("Connected");
-            // go to scouts page
+        $scope.connect = function(device) {
+			var onConnect = function() {
+            	bluetoothSerial.subscribe('\n', $scope.onData, $scope.onError);
+
+				$scope.bluetoothStream = ""
+				$scope.setStatus("Connected to " + device.name);
+				$scope.status.connected = true;
+				// go to scouts page
+			};
+			
+			bluetoothSerial.connect(device.id, onConnect, $scope.onError);
         }
 		$scope.onData = function(data) {
 			console.log(data);
-			$scope.bluetoothStream += data;
+			$scope.bluetoothStream = data;
+		}
+		$scope.sendData = function(
+		) {
+			var success = function() {
+				console.log("sending data: " + $scope.strCommand);
+				console.log("success");
+			}
+			var failure = function() {
+				console.log("Failed writing data to Bluetooth peripheral");
+			}
+			// Grab command to be sent:
+			var data = $scope.strCommand;
+			// Send command:
+			bluetoothSerial.write(data, success, failure);
 		}
         $scope.setStatus = function(message) {
             $scope.status.message = message;
@@ -63,6 +92,10 @@
             $scope.status.message = "ERROR: " + reason;
 			console.log("ERROR: " + reason);
         }
+		$scope.getHvacScouts = function() {
+			$scope.strCommand = "getHvacScouts:";
+			$scope.sendData();
+		}
     })
  
     .service('btService', function() {

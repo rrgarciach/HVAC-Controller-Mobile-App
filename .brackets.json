@@ -1,6 +1,9 @@
 {
     "jscodehints.detectedExclusions": [
         "/Users/rrgarciach/Documents/Development/Cordova/hvacController/www/lib/ionic/js/ionic.min.js",
-        "/Users/rrgarciach/Documents/Development/Cordova/hvacController/www/js/controllers.js"
+        "/Users/rrgarciach/Documents/Development/Cordova/hvacController/www/js/controllers.js",
+        "/Users/rrgarciach/Documents/Development/Cordova/hvacController/platforms/ios/build/emulator/hvacController.app/www/plugins/org.apache.cordova.device/www/device.js",
+        "/Users/rrgarciach/Documents/Development/Cordova/hvacController/platforms/ios/www/cordova_plugins.js",
+        "/Users/rrgarciach/Documents/Development/Cordova/hvacController/platforms/ios/www/js/app.js"
     ]
 }
