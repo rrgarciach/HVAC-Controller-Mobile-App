@@ -80,7 +80,7 @@
 				console.log("Failed writing data to Bluetooth peripheral");
 			}
 			// Grab command to be sent:
-			var data = $scope.strCommand;
+			var data = $scope.strCommand + "\n";
 			// Send command:
 			bluetoothSerial.write(data, success, failure);
 		}
@@ -93,7 +93,7 @@
 			console.log("ERROR: " + reason);
         }
 		$scope.getHvacScouts = function() {
-			$scope.strCommand = "getHvacScouts:";
+			$scope.strCommand = "getHvacScouts;";
 			$scope.sendData();
 		}
     })
