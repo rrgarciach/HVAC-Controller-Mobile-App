@@ -1,6 +1,19 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $ionicPlatform, $cordovaBluetoothSerial) {
+	$ionicPlatform.on('pause', function() {
+		$cordovaBluetoothSerial.clear();
+		var promise = $cordovaBluetoothSerial.disconnect();
+		promise.then(function(){
+			clearInterval($rootScope.getHvacScoutsInterval);
+			console.log("Bluetooth disconnected.");
+		}, function(error) {
+			console.log(error);
+		});
+	});
+	$ionicPlatform.on('resume', function() {
+		$cordovaBluetoothSerial.clear();
+	});
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -46,29 +59,84 @@ angular.module('starter.controllers', [])
     };
 })
 
+.controller('WelcomeCtrl', function($scope, $state, $ionicHistory, $localstorage, $cordovaBluetoothSerial, 
+$ionicPlatform) {
+//	$scope.$on('$ionicView.beforeEnter', function(state) {
+	$ionicPlatform.on('deviceready', function() {
+		$scope.enableBuetooth = function() {
+			var promise = $cordovaBluetoothSerial.isEnabled();
+			promise.then(function() {
+				console.log("Bluetooth is already enabled.");
+				$state.go('app.connect');
+			}, function() {
+				console.log("Bluetooth is not enabled.");
+				var promise = $cordovaBluetoothSerial.enable();
+				promise.then(function() {
+					console.log("Requesting to enable Bluetooth.");
+					if (typeof $localstorage.get('deviceId') === 'undefined') {
+						$state.go('app.connect');
+						$ionicHistory.nextViewOptions({
+							disableBack: true,
+							historyRoot: true
+						});
+					} else {
+						$state.go('app.scouts');
+						$ionicHistory.nextViewOptions({
+							disableAnimate: true,
+							disableBack: true,
+							historyRoot: true
+						});
+					}
+				}, function() {
+					console.log("Failed to enable Bluetooth.");
+				});
+			});
+		}
+		
+		$scope.enableBuetooth();
+	});
+})
+
 .controller('ConnectCtrl', function($scope, $cordovaBluetoothSerial, $localstorage) {
 	var promise = $cordovaBluetoothSerial.list();
-	promise.then(function(data){
+	promise.then(function(data) {
 		$scope.devices = data;
 	}, function(error) {
 		console.log(error);
 	});
 	$scope.selectDevice = function(deviceId) {
 		$localstorage.set('deviceId',deviceId);
-		console.log($localstorage.get('deviceId'));
+		console.log("Stored Master Device ID is: " + $localstorage.get('deviceId'));
 	}
 })
 
-.controller('SyncCtrl', function($scope, $state, $cordovaBluetoothSerial, $localstorage) {
+.controller('SyncCtrl', function($rootScope, $scope, $state, $ionicHistory, $cordovaBluetoothSerial, $localstorage) {
 	$scope.status = "Connecting with Master Device...";
 	var deviceId = $localstorage.get('deviceId');
 	var promise = $cordovaBluetoothSerial.connect(deviceId);
 	promise.then(function(){
 		$scope.status = "Retrieving data...";
+		$cordovaBluetoothSerial.clear();
 		$scope.getHvacScouts();
 	}, function(error) {
 		console.log(error);
 	});
+	
+	$scope.getHvacScouts = function() {
+//		$cordovaBluetoothSerial.write('setNewHvacScout;mi scoutcito,0;');
+		$rootScope.getHvacScoutsInterval = setInterval(function() {
+			$cordovaBluetoothSerial.write('getHvacScouts;');
+			console.log('Requesting HVAC Scouts.');
+			console.log('JSON of scouts received: ' + angular.fromJson($scope.scouts));
+		}, 5000);
+		var promise = $cordovaBluetoothSerial.write('getHvacScouts;');
+		promise.then(function(){
+			setTimeout(function(){$scope.onConnect()},5000);
+			console.log('OK');
+		}, function(error) {
+			console.log(error);
+		});
+	}
 	
 	$scope.onConnect = function() {
 		$scope.status = "Syncing...";
@@ -88,22 +156,13 @@ angular.module('starter.controllers', [])
 		console.log('parsed');
 		$localstorage.setObject('scouts',$scope.scouts);
 		$scope.status = "Done.";
-		setTimeout(function(){ $state.go('app.scouts') },1500);
-	}
-	$scope.getHvacScouts = function() {
-//		$cordovaBluetoothSerial.write('setNewHvacScout;mi scoutcito,0;');
-		setInterval(function() {
-			$cordovaBluetoothSerial.write('getHvacScouts;');
-			console.log('running getHvacScouts');
-			console.log('scouts: ' + angular.fromJson($scope.scouts));
-		}, 5000);
-		var wPromise = $cordovaBluetoothSerial.write('getHvacScouts;');
-		wPromise.then(function(){
-			setTimeout(function(){$scope.onConnect()},5000);
-			console.log('OK');
-		}, function(error) {
-			console.log(error);
-		});
+		setTimeout(function(){
+			$state.go('app.scouts');
+			$ionicHistory.nextViewOptions({
+							disableBack: true,
+							historyRoot: true
+						});
+		},1500);
 	}
 })
 

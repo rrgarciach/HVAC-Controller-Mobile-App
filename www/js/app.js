@@ -98,7 +98,7 @@ var app = angular.module('starter', ['ionic',
         views: {
           'menuContent': {
             templateUrl: "templates/welcome.html",
-//              controller: "WelcomeCtrl"
+              controller: "WelcomeCtrl"
           }
         }
     })
