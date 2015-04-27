@@ -1,14 +1,18 @@
-<ion-view view-title="Connect">
-  <ion-content>
-      <ion-item ng-repeat="device in devicesList" ng-click="connect(device)">
-          Device name: {{device.name}}
-      </ion-item>
-      <ion-item>
-          status: {{status.message}}
-      </ion-item>
-      <ion-item ng-click="getHvacScouts()">
-          Get Scouts
-      </ion-item>
-      <ion-item ng-if="status.connected" ng-repeat="scout in scouts"></ion-item>
+<ion-view hide-nav-bar="true" view-title="Pairing">
+  <ion-content class="welcome-screen">
+	  <ion-item>
+		  <h1 class="title">Select the HVAC Master Device</h1>
+		  <p>The following list shows the detected HVAC Master Devices
+		  in the area. Please select the right one:</p>
+	  </ion-item>
+	  </ion-item>
+	  <ion-item class="item-icon-right" 
+				ng-repeat="device in devices | filter:{name:'HVAC_Master'}" 
+				ng-click="selectDevice(device.id)"
+				href="#/app/sync">
+		  <i class="icon ion-ios-arrow-forward"></i>
+		  <h2>HVAC Master Device</h2>
+		  <p>Address: {{device.id}}</p>
+	  </ion-item>
   </ion-content>
 </ion-view>

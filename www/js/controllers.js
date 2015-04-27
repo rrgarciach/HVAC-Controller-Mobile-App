@@ -46,8 +46,71 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('ScoutsCtrl', function($scope, scoutService, groupsService) {
-    $scope.scouts = scoutService.getScouts()
+.controller('ConnectCtrl', function($scope, $cordovaBluetoothSerial, $localstorage) {
+	var promise = $cordovaBluetoothSerial.list();
+	promise.then(function(data){
+		$scope.devices = data;
+	}, function(error) {
+		console.log(error);
+	});
+	$scope.selectDevice = function(deviceId) {
+		$localstorage.set('deviceId',deviceId);
+		console.log($localstorage.get('deviceId'));
+	}
+})
+
+.controller('SyncCtrl', function($scope, $state, $cordovaBluetoothSerial, $localstorage) {
+	$scope.status = "Connecting with Master Device...";
+	var deviceId = $localstorage.get('deviceId');
+	var promise = $cordovaBluetoothSerial.connect(deviceId);
+	promise.then(function(){
+		$scope.status = "Retrieving data...";
+		$scope.getHvacScouts();
+	}, function(error) {
+		console.log(error);
+	});
+	
+	$scope.onConnect = function() {
+		$scope.status = "Syncing...";
+//		var p = $cordovaBluetoothSerial.subscribe("\n");
+		var p = $cordovaBluetoothSerial.read();
+//		var p = $cordovaBluetoothSerial.subscribeRawData();
+		p.then(function(data){
+			console.log('reading');
+			$scope.onData(data);
+		}, function(error) {
+			console.log(error);
+		});
+	}
+	$scope.onData = function(data) {
+		console.log('Received data: ' + data);
+		$scope.scouts = angular.fromJson(data);
+		console.log('parsed')
+		$localstorage.setObject('scouts',$scope.scouts);
+		$scope.status = "Done.";
+		setTimeout(function(){ $state.go('app.scouts') },1500);
+	}
+	$scope.getHvacScouts = function() {
+//		$cordovaBluetoothSerial.write('setNewHvacScout;mi scoutcito,0;');
+		setInterval(function() {
+			$cordovaBluetoothSerial.write('getHvacScouts;');
+			console.log('running getHvacScouts');
+			console.log('scouts: ' + angular.fromJson($scope.scouts));
+		}, 5000);
+		var wPromise = $cordovaBluetoothSerial.write('getHvacScouts;');
+		wPromise.then(function(){
+			setTimeout(function(){$scope.onConnect()},5000);
+			console.log('OK');
+		}, function(error) {
+			console.log(error);
+		});
+	}
+})
+
+.controller('ScoutsCtrl', function($scope, $localstorage, groupsService) {
+//    $scope.scouts = scoutService.getScouts()
+    $scope.scouts = $localstorage.getObject('scouts');
+	console.log('scouts: ' + $scope.scouts);
     $scope.groups = groupsService.getGroups()
 })
 
@@ -84,3 +147,22 @@ angular.module('starter.controllers', [])
         $scope.closeGroupNameModal()
     };
 })
+
+angular.module('ionic.utils', [])
+
+.factory('$localstorage', ['$window', function($window) {
+  return {
+    set: function(key, value) {
+      $window.localStorage[key] = value;
+    },
+    get: function(key, defaultValue) {
+      return $window.localStorage[key] || defaultValue;
+    },
+    setObject: function(key, value) {
+      $window.localStorage[key] = JSON.stringify(value);
+    },
+    getObject: function(key) {
+      return JSON.parse($window.localStorage[key] || '{}');
+    }
+  }
+}]);

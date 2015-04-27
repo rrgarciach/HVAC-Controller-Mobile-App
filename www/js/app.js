@@ -4,7 +4,11 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-var app = angular.module('starter', ['ionic', 'starter.controllers', 'bluetoothSerial'])
+var app = angular.module('starter', ['ionic', 
+									 'starter.controllers', 
+									 'ionic.utils',
+									 'ngCordova.plugins.bluetoothSerial',
+									])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -79,6 +83,26 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'bluetoothS
         }
     })
   
+    .state('app.sync', {
+        url: "/sync",
+        views: {
+          'menuContent': {
+            templateUrl: "templates/sync.html",
+              controller: "SyncCtrl"
+          }
+        }
+    })
+  
+    .state('app.welcome', {
+        url: "/welcome",
+        views: {
+          'menuContent': {
+            templateUrl: "templates/welcome.html",
+//              controller: "WelcomeCtrl"
+          }
+        }
+    })
+  
     .state('app.connect', {
         url: "/connect",
         views: {
@@ -90,7 +114,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'bluetoothS
     });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/connect');
+  $urlRouterProvider.otherwise('/app/welcome');
 })
 
 app.service('scoutService', function() {

@@ -1,4 +1,18 @@
-/* Empty. Add your own CSS if you like */
+.welcome-screen h1 {
+	margin-top: 25%;
+	text-align: center;
+	white-space: normal;
+}
+.welcome-screen p {
+	white-space: normal;
+	text-align: justify;
+}
+.welcome-screen i.large-icons {
+	margin: 5% 0;
+	display: block;
+	text-align: center;
+	font-size: 10rem;
+}
 .main-screen .temperature h1 {
     font-size: 4rem;
     text-align: right;

@@ -17,20 +17,22 @@
                       <h1>{{scout.id}}</h1>
                   </div>
                   <div class="col labels">
-                      <h2 ng-if="scout.groupId!='None'"><strong>Group: </strong></h2>
+                      <h2 ng-if="scout.groupId >= 0"><strong>Group: </strong></h2>
                       <h2><strong>Name: </strong></h2>
                       <h2><strong>Current Temp: </strong></h2>
                       <h2><strong>Max Temp: </strong></h2>
+                      <h2><strong>Humidity: </strong></h2>
                       <h2><strong>Power: </strong></h2>
                       <h2><strong>Automatic: </strong></h2>
                       <h2><strong>Quiet: </strong></h2>
                       <h2><strong>Delay Time: </strong></h2>
                   </div>
                   <div class="col values">
-                      <h2 ng-if="scout.groupId!='None'">{{groups[ scout.groupId - 1 ].name}}</h2>
-                      <h2>{{scout.temperature}} °C</h2>
+                      <h2 ng-if="scout.groupId >= 0">{{groups[ scout.groupId - 1 ].name}}</h2>
+                      <h2>{{scout.name}}</h2>
                       <h2>{{scout.temperature}} °C</h2>
                       <h2>{{scout.maxTemperature}} °C</h2>
+                      <h2>{{scout.humidity}}%</h2>
                       <h2>{{scout.power}}</h2>
                       <h2>{{scout.automatic}}</h2>
                       <h2>{{scout.quiet}}</h2>
