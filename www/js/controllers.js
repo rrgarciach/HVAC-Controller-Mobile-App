@@ -85,7 +85,7 @@ angular.module('starter.controllers', [])
 	$scope.onData = function(data) {
 		console.log('Received data: ' + data);
 		$scope.scouts = angular.fromJson(data);
-		console.log('parsed')
+		console.log('parsed');
 		$localstorage.setObject('scouts',$scope.scouts);
 		$scope.status = "Done.";
 		setTimeout(function(){ $state.go('app.scouts') },1500);
@@ -111,22 +111,22 @@ angular.module('starter.controllers', [])
 //    $scope.scouts = scoutService.getScouts()
     $scope.scouts = $localstorage.getObject('scouts');
 	console.log('scouts: ' + $scope.scouts);
-    $scope.groups = groupsService.getGroups()
+    $scope.groups = groupsService.getGroups();
 })
 
 .controller('ScoutCtrl', function($scope, $stateParams, scoutService, groupsService) {
 //    $scope.scout = angular.fromJson($stateParams.scout)
-    $scope.scout = scoutService.getScout($stateParams.scoutId)
-    $scope.groups = groupsService.getGroups()
-    $scope.group = groupsService.getGroup($scope.scout.groupId)
+    $scope.scout = scoutService.getScout($stateParams.scoutId);
+    $scope.groups = groupsService.getGroups();
+    $scope.group = groupsService.getGroup($scope.scout.groupId);
 })
 
 .controller('GroupsCtrl', function($scope, groupsService) {
-    $scope.groups = groupsService.getGroups()
+    $scope.groups = groupsService.getGroups();
 })
 
 .controller('GroupCtrl', function($scope, $stateParams, groupsService, $ionicModal) {
-    $scope.group = groupsService.getGroup($stateParams.groupId)
+    $scope.group = groupsService.getGroup($stateParams.groupId);
     
     $ionicModal.fromTemplateUrl('templates/group-name-modal.html', {
         scope: $scope,
@@ -142,9 +142,9 @@ angular.module('starter.controllers', [])
         $scope.groupNameModal.hide();
     };
     $scope.saveGroup = function() {
-        $scope.group.name = $scope.form.name
-        groupsService.setGroup($scope.group)
-        $scope.closeGroupNameModal()
+        $scope.group.name = $scope.form.name;
+        groupsService.setGroup($scope.group);
+        $scope.closeGroupNameModal();
     };
 })
 

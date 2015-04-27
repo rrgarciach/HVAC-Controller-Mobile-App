@@ -117,65 +117,38 @@ var app = angular.module('starter', ['ionic',
   $urlRouterProvider.otherwise('/app/welcome');
 })
 
-app.service('scoutService', function() {
-    var scouts = [
-                    {
-                        id:1,
-                        groupId:1,
-                        password:'1234',
-                        automatic:true,
-                        name:'Zone A',
-                        temperature:24,
-                        maxTemperature:24,
-                        power:false,
-                        quiet:false,
-                        delayTime:900,
-                    },
-                    {
-                        id:2,
-                        groupId:1,
-                        password:'1234',
-                        automatic:false,
-                        name:'Zone B',
-                        temperature:21,
-                        maxTemperature:24,
-                        power:true,
-                        quiet:true,
-                        delayTime:900,
-                    },
-                    ];
-    
+app.service('scoutService', function() {    
     var addScout = function(scout) {
         for (var i=0 ; i < scouts.length ; i++) {
             if (scouts[i].id == scout.id) {
                 return false;
             }
         }
-        scouts.push(scout)
+        scouts.push(scout);
         return true;
     }
     var setScouts = function(scouts) {
-        scouts = scouts
+        scouts = scouts;
     }
     var setScout = function(scout) {
         for (var i=0 ; i < scouts.length ; i++) {
             if (scouts[i].id == scout.id) {
-                scouts[i] = scout
-                return true
+                scouts[i] = scout;
+                return true;
             }
         }
-        return false
+        return false;
     }
     var getScouts = function() {
-        return scouts
+        return scouts;
     }
     var getScout = function(id) {
         for (var i=0 ; i < scouts.length ; i++) {
             if (scouts[i].id == id) {
-                return scouts[i]
+                return scouts[i];
             }
         }
-        return false
+        return false;
     }
     return {
         addScout: addScout,
@@ -216,27 +189,27 @@ app.service('groupsService', function() {
         return true;
     }
     var setGroups = function(objArray) {
-        groups = objArray
+        groups = objArray;
     }
     var setGroup = function(group) {
         for (var i=0 ; i < groups.length ; i++) {
             if (groups[i].id == group.id) {
-                groups[i] = group
-                return true
+                groups[i] = group;
+                return true;
             }
         }
-        return false
+        return false;
     }
     var getGroups = function() {
-        return groups
+        return groups;
     }
     var getGroup = function(id) {
         for (var i=0 ; i < groups.length ; i++) {
             if (groups[i].id == id) {
-                return groups[i]
+                return groups[i];
             }
         }
-        return false
+        return false;
     }
     return {
         addGroup: addGroup,
@@ -246,19 +219,3 @@ app.service('groupsService', function() {
         getGroup: getGroup
     };
 });
-
-//app.factory('myService', function() {
-// var savedData = {}
-// function set(data) {
-//   savedData = data;
-// }
-// function get() {
-//  return savedData;
-// }
-//
-// return {
-//  set: set,
-//  get: get
-// }
-//
-//});
