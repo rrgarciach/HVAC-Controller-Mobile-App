@@ -117,7 +117,9 @@ var app = angular.module('starter', ['ionic',
   $urlRouterProvider.otherwise('/app/welcome');
 })
 
-app.service('scoutService', function() {    
+.service('ScoutService', function() {
+	var scouts = [];
+	
     var addScout = function(scout) {
         for (var i=0 ; i < scouts.length ; i++) {
             if (scouts[i].id == scout.id) {
@@ -127,8 +129,8 @@ app.service('scoutService', function() {
         scouts.push(scout);
         return true;
     }
-    var setScouts = function(scouts) {
-        scouts = scouts;
+    var setScouts = function(newScouts) {
+        scouts = newScouts;
     }
     var setScout = function(scout) {
         for (var i=0 ; i < scouts.length ; i++) {
@@ -157,9 +159,9 @@ app.service('scoutService', function() {
         getScouts: getScouts,
         getScout: getScout
     };
-});
+})
 
-app.service('groupsService', function() {
+.service('groupsService', function() {
     var groups = [
                         {
                             id: 1,
