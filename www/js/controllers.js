@@ -120,15 +120,20 @@ $ionicPlatform) {
 								  $ionicHistory, 
 								  $cordovaBluetoothSerial, 
 								  $localstorage, 
-								  ScoutService) {
+								  ScoutService,
+								 GroupsService) {
 	$scope.status = "Connecting with Master Device...";
 	var deviceId = $localstorage.get('deviceId');
 	
 	var promise = $cordovaBluetoothSerial.connect(deviceId);
 	promise.then(function(){
 		$scope.status = "Retrieving data...";
-		$scope.getHvacScouts();
-		$rootScope.getHvacScoutsInterval = setInterval(function() { $scope.getHvacScouts(); }, 5000);
+		$scope.getFullState();
+//		$scope.getHvacScouts();
+//		$scope.getHvacScoutsGroups();
+		$rootScope.getgetFullStateInterval = setInterval(function() {
+			$scope.getFullState();
+		}, 5000);
 	}, function(error) {
 		console.log(error);
 	});
@@ -144,11 +149,21 @@ $ionicPlatform) {
 		}, function(error) {
 			console.log(error);
 		});
-	}
+	};
+	
+	$scope.getFullState = function() {
+		console.log('Requesting Full State.');
+		var promise = $cordovaBluetoothSerial.write('getFullState;');
+		promise.then(function(){
+			setTimeout(function(){ $scope.onRequestedData() },5000);
+		}, function(error) {
+			console.log(error);
+		});
+	};
 	
 	$scope.onRequestedData = function() {
 		$scope.status = "Syncing...";
-//		var promise = $cordovaBluetoothSerial.subscribe("\n");
+//		var promise = $cordovaBluetoothSerial.subscribe('\n');
 //		var promise = $cordovaBluetoothSerial.readUntil('\n');
 //		var promise = $cordovaBluetoothSerial.subscribeRawData();
 		var promise = $cordovaBluetoothSerial.read();
@@ -161,7 +176,7 @@ $ionicPlatform) {
 		});
 	}
 	$scope.onData = function(data) {
-		var index = data.indexOf('\n');
+		var index = data.indexOf('\r');
 		// Remove repeated JSON strings:
 		if (index < 0) {
 			result = data;
@@ -172,13 +187,19 @@ $ionicPlatform) {
 		// Check if string is correct:
 		if (result.length == 0) {
 			console.log('Empty string received.');
-		} else if ( result.charAt(0) !== '[' || result.charAt(result.length-2) !== ']' ) {
-			console.log('JSON string object wrong format.');
+//		} else if ( result.charAt(0) !== '{' || result.charAt(result.length-2) !== '}' ) {
+//			console.log('JSON string object wrong format.');
 		} else {
-			var scouts = angular.fromJson(result);
-			console.log('JSON string parsed into object.');
+			var object = JSON.parse(result);
+			var scouts = object.scouts;
+			console.log('JSON string parsed into Scouts object.');
 			ScoutService.setScouts(scouts);
 //			console.log('Scouts set: ' + angular.toJson(ScoutService.getScouts()) );
+
+			var groups = object.groups;
+			console.log('JSON string parsed into Groups object.');
+			GroupsService.setGroups(groups);
+
 			$scope.status = "Done.";
 			$state.go('app.scouts');
 			$ionicHistory.nextViewOptions({
@@ -189,29 +210,38 @@ $ionicPlatform) {
 	}
 })
 
-.controller('ScoutsCtrl', function($scope, ScoutService, groupsService, $cordovaBluetoothSerial) {
+.controller('ScoutsCtrl', function($scope, ScoutService, GroupsService, $cordovaBluetoothSerial) {
+	$scope.averageTemperature = 0;
     $scope.scouts = ScoutService.getScouts();
 	$scope.scoutsCtrlInterval = setInterval(function() {
 		$scope.scouts = ScoutService.getScouts();
+		console.log('RECEIVED ' + $scope.scouts.length + ' SCOUTS.');
 		console.log('Scouts: ' + angular.toJson($scope.scouts) );
-	}, 5000);
-	$cordovaBluetoothSerial.write('setValueForScoutFromHS;0,changeDelayTime;5;');
-    $scope.groups = groupsService.getGroups();
+		$scope.averageTemperature = 0;
+		angular.forEach($scope.scouts, function(value, key) {
+			$scope.averageTemperature += value.temperature;
+		});
+		$scope.averageTemperature /= $scope.scouts.length;
+	}, 1000);
+//	$cordovaBluetoothSerial.write('setValueForScoutFromHS;0,changeDelayTime;5;');
+	$cordovaBluetoothSerial.write('setValScoutFHS;0,changeDelayTime;900;');
+    $scope.groups = GroupsService.getGroups();
 })
 
-.controller('ScoutCtrl', function($scope, $stateParams, ScoutService, groupsService) {
-    $scope.scout = angular.fromJson($stateParams.scout)
+.controller('ScoutCtrl', function($scope, $stateParams, ScoutService, GroupsService) {
+    var scoutId = angular.fromJson($stateParams.scoutId);
+    $scope.scout = angular.fromJson(ScoutService.getScout(scoutId));
 //    $scope.scout = scoutService.getScout($stateParams.scoutId);
-    $scope.groups = groupsService.getGroups();
-    $scope.group = groupsService.getGroup($scope.scout.groupId);
+    $scope.groups = GroupsService.getGroups();
+    $scope.group = GroupsService.getGroup($scope.scout.groupId);
 })
 
-.controller('GroupsCtrl', function($scope, groupsService) {
-    $scope.groups = groupsService.getGroups();
+.controller('GroupsCtrl', function($scope, GroupsService) {
+    $scope.groups = GroupsService.getGroups();
 })
 
-.controller('GroupCtrl', function($scope, $stateParams, groupsService, $ionicModal) {
-    $scope.group = groupsService.getGroup($stateParams.groupId);
+.controller('GroupCtrl', function($scope, $stateParams, GroupsService, $ionicModal) {
+    $scope.group = GroupsService.getGroup($stateParams.groupId);
     
     $ionicModal.fromTemplateUrl('templates/group-name-modal.html', {
         scope: $scope,
@@ -228,7 +258,7 @@ $ionicPlatform) {
     };
     $scope.saveGroup = function() {
         $scope.group.name = $scope.form.name;
-        groupsService.setGroup($scope.group);
+        GroupsService.setGroup($scope.group);
         $scope.closeGroupNameModal();
     };
 })

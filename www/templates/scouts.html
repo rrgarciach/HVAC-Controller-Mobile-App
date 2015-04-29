@@ -6,7 +6,7 @@
                   <h2>Average<br/>Temperature</h2>
               </div>
               <div class="col col-center col-50">
-                  <h1>24<span> °C</span></h1>
+                  <h1>{{averageTemperature}}<span> °C</span></h1>
               </div>
           </div>
       </ion-item>
@@ -36,7 +36,7 @@
                       <h2>{{scout.power}}</h2>
                       <h2>{{scout.automatic}}</h2>
                       <h2>{{scout.quiet}}</h2>
-                      <h2>{{scout.delayTime / 60}} minutes</h2>
+                      <h2>{{scout.delayTime >= 60 ? (scout.delayTime / 60) + ' minutes' : scout.delayTime + ' seconds'}}</h2>
                   </div>
               </div>
           </ion-item>

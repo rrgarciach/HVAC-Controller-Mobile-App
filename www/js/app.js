@@ -161,26 +161,7 @@ var app = angular.module('starter', ['ionic',
     };
 })
 
-.service('groupsService', function() {
-    var groups = [
-                        {
-                            id: 1,
-                            name: 'Group 1',
-                        },
-                        {
-                            id: 2,
-                            name: 'Group 2',
-                        },
-                        {
-                            id: 3,
-                            name: 'Group 3',
-                        },
-                        {
-                            id: 4,
-                            name: 'Group 4',
-                        },
-                    ];
-    
+.service('GroupsService', function() {    
     var addGroup = function(group) {
         for (var i=0 ; i < groups.length ; i++) {
             if (groups[i].id == group.id) {
