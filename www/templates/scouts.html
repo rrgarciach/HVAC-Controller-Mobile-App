@@ -3,16 +3,17 @@
       <ion-item>
           <div class="row temperature">
               <div class="col col-center">
-                  <h2>Average<br/>Temperature</h2>
+                  <h2>Average</h2>
+				  <h2>Temperature</h2>
               </div>
-              <div class="col col-center col-50">
+              <div class="col col-center col-67">
                   <h1>{{averageTemperature}}<span> °C</span></h1>
               </div>
           </div>
       </ion-item>
       <ion-list>
           <ion-item ng-repeat="scout in scouts" href="#/app/scout/{{scout.id}}">
-              <div class="row">
+              <div class="row {{ scout.status == 1 ? 'online' : 'offline'}}">
                   <div class="col col-20">
                       <h1>{{scout.id}}</h1>
                   </div>
@@ -39,6 +40,11 @@
                       <h2>{{scout.delayTime >= 60 ? (scout.delayTime / 60) + ' minutes' : scout.delayTime + ' seconds'}}</h2>
                   </div>
               </div>
+			  <div class="row">
+				  <div class="col">
+					  <h2 class="label-offline">{{scout.status == 1 ? '' : 'OFFLINE'}}</h2>
+				  </div>
+			  </div>
           </ion-item>
       </ion-list>
   </ion-content>

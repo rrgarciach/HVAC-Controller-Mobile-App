@@ -122,6 +122,7 @@ $ionicPlatform) {
 								  $localstorage, 
 								  ScoutService,
 								 GroupsService) {
+	$rootScope.connected = false;
 	$scope.status = "Connecting with Master Device...";
 	var deviceId = $localstorage.get('deviceId');
 	
@@ -131,7 +132,7 @@ $ionicPlatform) {
 		$scope.getFullState();
 //		$scope.getHvacScouts();
 //		$scope.getHvacScoutsGroups();
-		$rootScope.getgetFullStateInterval = setInterval(function() {
+		$rootScope.getFullStateInterval = setInterval(function() {
 			$scope.getFullState();
 		}, 5000);
 	}, function(error) {
@@ -200,12 +201,15 @@ $ionicPlatform) {
 			console.log('JSON string parsed into Groups object.');
 			GroupsService.setGroups(groups);
 
-			$scope.status = "Done.";
-			$state.go('app.scouts');
-			$ionicHistory.nextViewOptions({
-							disableBack: true,
-							historyRoot: true
-						});
+			if ($rootScope.connected == false) {
+				$scope.status = "Done.";
+				$ionicHistory.nextViewOptions({
+								disableBack: true,
+								historyRoot: true
+							});
+				$rootScope.connected = true;
+				setTimeout($state.go('app.scouts'), 1500);
+			}
 		}
 	}
 })
@@ -216,12 +220,20 @@ $ionicPlatform) {
 	$scope.scoutsCtrlInterval = setInterval(function() {
 		$scope.scouts = ScoutService.getScouts();
 		console.log('RECEIVED ' + $scope.scouts.length + ' SCOUTS.');
-		console.log('Scouts: ' + angular.toJson($scope.scouts) );
+//		console.log('Scouts: ' + angular.toJson($scope.scouts) );
 		$scope.averageTemperature = 0;
+		var qtyOnline = 0;
 		angular.forEach($scope.scouts, function(value, key) {
-			$scope.averageTemperature += value.temperature;
+			if (value.status > 0) {
+				qtyOnline++;
+				$scope.averageTemperature += value.temperature;
+			}
 		});
-		$scope.averageTemperature /= $scope.scouts.length;
+		if (qtyOnline > 0) {
+			$scope.averageTemperature /= qtyOnline;
+		} else {
+			$scope.averageTemperature = 'N/A';
+		}
 	}, 1000);
 //	$cordovaBluetoothSerial.write('setValueForScoutFromHS;0,changeDelayTime;5;');
 	$cordovaBluetoothSerial.write('setValScoutFHS;0,changeDelayTime;900;');
